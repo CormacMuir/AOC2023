@@ -6,7 +6,7 @@
 #include <algorithm>
 
 using namespace std;
-
+bool isNum(string);
 int main()
 {
   vector<string> vec = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
@@ -21,14 +21,20 @@ int main()
   mp["eight"] = '8';
   mp["nine"] = '9';
 
-  ifstream infile("input_1_.txt");
+  ifstream infile("input_1.txt");
   string line;
   int total = 0;
   while (getline(infile, line))
   {
-    cout << line.length() << endl;
     string lower;
     string upper;
+    if(isNum(line)){
+      lower = line[0];
+      upper = line[line.length()-1];
+      int number_to_add = stoi(lower + upper);
+      cout << line <<" Produces: "<< number_to_add << endl;
+      total += number_to_add;
+    }else{
     for (int i = 0; i < line.length(); i++)
     {
       {
@@ -41,14 +47,12 @@ int main()
         }
         else
         {
-          cout << isdigit(line[i]);
           for (int j = 0; j < i; j++)
           {
-
-            if (find(vec.begin(), vec.end(), line.substr(j, i)) != vec.end())
+            if (find(vec.begin(), vec.end(), line.substr(j, i+1)) != vec.end())
             {
 
-              lower = mp[line.substr(j, i)];
+              lower = mp[line.substr(j, i+1)];
 
               i = line.length();
               j = i + 1;
@@ -85,13 +89,21 @@ int main()
             j = 999;
 
             int number_to_add = stoi(lower + upper);
-            cout << "output:" << number_to_add << endl;
+            cout << line <<" Produces: "<< number_to_add << endl;
             total += number_to_add;
           }
         }
       }
     }
+    }
   }
   cout << total << endl;
   return 0;
+}
+
+bool isNum(string line)
+{
+    char* p;
+    strtol(line.c_str(), &p, 10);
+    return *p == 0;
 }
